@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{% block title %}Online Voting System{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+  <!-- Navbar -->
+  <nav class="bg-blue-600 p-4 text-white text-xl font-semibold shadow flex items-center justify-between">
+    <div>Online Voting System</div>
+    <div class="hidden md:flex items-center space-x-4">
+      <span>Welcome, {{ request.user.first_name }}</span>
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="bg-red-500 hover:bg-red-600 px-3 py-1 rounded text-white">Logout</button>
+      </form>
+    </div>
+  </nav>
+
+  <div class="flex min-h-screen">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white shadow-lg flex flex-col">
+
+      <div class="p-6 text-center border-b border-gray-200">
+        <img
+          src="{{ request.user.profile_picture.url }}"
+          alt="Profile"
+          class="w-24 h-24 rounded-full mx-auto border-4 border-blue-100 shadow-sm"
+        />
+        <h2 class="text-xl font-semibold mt-3">
+          {{ request.user.first_name }} {{ request.user.last_name }}
+          {% if request.user.is_email_verified %}
+            <i class="fa-solid fa-check-circle text-blue-500 ml-1"></i>
+          {% else %}
+            <i class="fa-solid fa-circle-xmark text-red-500 ml-1"></i>
+          {% endif %}
+        </h2>
+        <a href="{% url 'edit_profile' %}" class="text-sm text-blue-600 hover:underline">Edit Profile</a>
+      </div>
+
+      <nav class="flex-grow px-4 mt-6 space-y-3">
+        <a href="{% url 'dashboard' %}"
+           class="block px-4 py-3 rounded hover:bg-blue-600 transition
+           {% if request.resolver_match.url_name == 'dashboard' %} bg-blue-800 text-white {% else %} text-gray-700 {% endif %}">
+          <i class="fa-solid fa-chart-line mr-2"></i> Dashboard
+        </a>
+
+        <a href="{% url 'vote' %}"
+           class="block px-4 py-3 rounded hover:bg-blue-600 transition
+           {% if request.resolver_match.url_name == 'vote' %} bg-blue-800 text-white {% else %} text-gray-700 {% endif %}">
+          <i class="fa-solid fa-vote-yea mr-2"></i> Vote
+        </a>
+
+        <a href="{% url 'verify_email' %}"
+           class="block px-4 py-3 rounded hover:bg-blue-600 transition
+           {% if request.resolver_match.url_name == 'verify_email' %} bg-blue-800 text-white {% else %} text-gray-700 {% endif %}">
+          <i class="fa-solid fa-envelope mr-2"></i> Verify Email
+        </a>
+
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="w-full text-left px-4 py-3 rounded hover:bg-red-600 transition text-red-600 hover:text-white">
+            <i class="fa-solid fa-door-open mr-2"></i> Logout
+          </button>
+        </form>
+      </nav>
+
+      <div class="p-4 border-t border-gray-200 text-center text-sm text-gray-500">
+        &copy; {{ now.year }} Voting System
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6 overflow-auto">
+      {% block content %}
+      {% endblock %}
+    </main>
+  </div>
+
+</body>
+</html>

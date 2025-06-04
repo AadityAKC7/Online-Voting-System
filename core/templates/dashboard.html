@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard - Online Voting System{% endblock %}
+
+{% block content %}
+<div class="flex flex-col space-y-6">
+
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-800">Welcome to the Voting System</h1>
+            <p class="text-sm text-gray-500 mt-1">Make sure to verify your email before voting.</p>
+        </div>
+        <div class="mt-4 sm:mt-0 flex flex-col sm:flex-row sm:items-center sm:gap-4 text-gray-600">
+
+            <!-- Live Date -->
+            <div id="liveDate" class="text-sm font-medium"></div>
+
+            <!-- Search Form -->
+            <form method="get" action="{% url 'search' %}" class="flex bg-white border rounded overflow-hidden shadow-sm">
+                <input type="text" name="q" placeholder="Search..." class="px-3 py-2 focus:outline-none" />
+                <button type="submit" class="bg-blue-500 text-white px-4 hover:bg-blue-600 transition">🔍</button>
+            </form>
+
+            <!-- Notifications Icon -->
+            <a href="{% url 'notifications' %}" title="Notifications" class="text-xl hover:text-gray-800 transition ml-auto sm:ml-0">🔔</a>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div class="bg-white p-5 rounded-lg shadow-sm">
+            <h3 class="text-sm text-gray-500">🗳️ Voting Progress</h3>
+            <p class="text-xl font-bold mt-1">{{ votes_cast }} / {{ total_positions }}</p>
+        </div>
+        <div class="bg-white p-5 rounded-lg shadow-sm">
+            <h3 class="text-sm text-gray-500">📨 Email Status</h3>
+            <p class="text-xl font-bold mt-1">
+                {% if request.user.is_email_verified %}
+                    ✅ Verified
+                {% else %}
+                    ❌ Not Verified
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Announcements -->
+    <section>
+        <h2 class="text-xl font-semibold mb-2">📢 Announcements</h2>
+        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-md space-y-2 shadow-sm min-h-[100px]">
+            {% for message in announcements %}
+                <p class="text-sm">• {{ message }}</p>
+            {% empty %}
+                <p class="text-sm text-gray-500">No announcements at the moment.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Voting Guide -->
+    <section>
+        <h2 class="text-xl font-semibold mb-2">🧭 How to Vote</h2>
+        <div class="bg-white p-5 rounded-lg shadow space-y-2 text-sm text-gray-700 leading-relaxed">
+            <div>✅ 1. <strong>Verify</strong> your email using the link sent to your inbox.</div>
+            <div>🗳️ 2. Click on <strong>Vote Now</strong> to see the available positions and candidates.</div>
+            <div>👤 3. Select your preferred candidates for each position.</div>
+            <div>📩 4. Submit your vote. <strong>Note:</strong> You can vote only once!</div>
+        </div>
+    </section>
+</div>
+
+<!-- Live Date Script -->
+<script>
+    function updateLiveDate() {
+        const now = new Date();
+        // Format: Tuesday, June 2, 2025 - 3:45:12 PM
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const dateString = now.toLocaleDateString(undefined, options);
+        const timeString = now.toLocaleTimeString(undefined, { hour12: true });
+        document.getElementById('liveDate').textContent = `${dateString} - ${timeString}`;
+    }
+    updateLiveDate();
+    setInterval(updateLiveDate, 1000);
+</script>
+{% endblock %}

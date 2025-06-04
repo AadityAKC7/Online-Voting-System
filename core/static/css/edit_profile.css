@@ -1,0 +1,83 @@
+/* edit_profile.css */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f5f7fa;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 480px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 30px 40px;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+label {
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="file"],
+input[type="tel"] {
+  padding: 10px 15px;
+  border: 1.8px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="file"]:focus,
+input[type="tel"]:focus {
+  outline: none;
+  border-color: #007BFF;
+}
+
+button {
+  background-color: #007BFF;
+  color: white;
+  font-weight: 600;
+  padding: 12px;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 17px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.current-photo {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.current-photo img {
+  width: 110px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #007BFF;
+}

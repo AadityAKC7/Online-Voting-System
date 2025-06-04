@@ -1,0 +1,132 @@
+{% extends "admin_base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block header_title %}Dashboard Overview{% endblock %}
+
+{% block admin_content %}
+
+<style>
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+        margin-bottom: 40px;
+    }
+    .stat-card {
+        padding: 20px;
+        border-radius: 16px;
+        color: #fff;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .stat-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+    }
+    .stat-card h3 {
+        margin: 0;
+        font-size: 1.2em;
+        opacity: 0.9;
+    }
+    .stat-card p {
+        font-size: 2em;
+        font-weight: 700;
+        margin: 8px 0 0;
+    }
+    .positions { background: linear-gradient(135deg, #1d976c, #93f9b9); }
+    .candidates { background: linear-gradient(135deg, #4568dc, #b06ab3); }
+    .total-voters { background: linear-gradient(135deg, #f7971e, #ffd200); }
+    .voted-voters { background: linear-gradient(135deg, #fc5c7d, #6a82fb); }
+</style>
+
+<section class="stats">
+    <div class="stat-card positions">
+        <i class="fas fa-thumbtack" style="font-size: 28px;"></i>
+        <h3>Positions</h3>
+        <p>{{ num_positions }}</p>
+    </div>
+    <div class="stat-card candidates">
+        <i class="fas fa-user-tie" style="font-size: 28px;"></i>
+        <h3>Candidates</h3>
+        <p>{{ num_candidates }}</p>
+    </div>
+    <div class="stat-card total-voters">
+        <i class="fas fa-users" style="font-size: 28px;"></i>
+        <h3>Total Voters</h3>
+        <p>{{ total_voters }}</p>
+    </div>
+    <div class="stat-card voted-voters">
+        <i class="fas fa-check-circle" style="font-size: 28px;"></i>
+        <h3>Voters Voted</h3>
+        <p>{{ voters_voted }}</p>
+    </div>
+</section>
+
+<section class="summary">
+    <h2>Vote Summary</h2>
+    {% for item in vote_data %}
+        <div style="margin-bottom: 40px;">
+            <h3>{{ item.position }}</h3>
+            <canvas id="chart-{{ forloop.counter }}" height="120"></canvas>
+
+            <div style="margin-top: 15px; background: #f9f9f9; padding: 10px; border-radius: 10px;">
+                <h4 style="margin-bottom: 10px;">Who Voted:</h4>
+                {% for cand, cand_voters in item.zipped %}
+                    <p><strong>{{ cand }}</strong> voted by:
+                        {% if cand_voters %}
+                            {{ cand_voters|join:", " }}
+                        {% else %}
+                            <em>No votes yet</em>
+                        {% endif %}
+                    </p>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+</section>
+
+<section class="controls" style="background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.05); margin-top: 30px;">
+    <h2>Quick Actions</h2>
+    <ul style="list-style:none; padding-left: 0;">
+        <li><a href="{% url 'reset_votes' %}">🔄 Reset Votes</a></li>
+        <li><a href="{% url 'manage_voters' %}">🧑‍💼 Manage Voters</a></li>
+        <li><a href="{% url 'manage_candidates' %}">👤 Manage Candidates</a></li>
+        <li><a href="{% url 'manage_positions' %}">📌 Manage Positions</a></li>
+        <li><a href="{% url 'logout' %}">✏️ Logout</a></li>
+    </ul>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    {% for item in vote_data %}
+        const ctx{{ forloop.counter }} = document.getElementById('chart-{{ forloop.counter }}').getContext('2d');
+        new Chart(ctx{{ forloop.counter }}, {
+            type: 'bar',
+            data: {
+                labels: {{ item.labels|safe }},
+                datasets: [{
+                    label: 'Votes per Candidate',
+                    data: {{ item.data|safe }},
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: true },
+                    tooltip: { mode: 'index', intersect: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1 }
+                    }
+                }
+            }
+        });
+    {% endfor %}
+</script>
+{% endblock %}

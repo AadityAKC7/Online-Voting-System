@@ -1,0 +1,48 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Edit Profile</title>
+  <link rel="stylesheet" href="{% static 'css/edit_profile.css' %}">
+</head>
+<body>
+  <div class="container">
+    <h2>Edit Your Profile</h2>
+
+    {% if user.profile_picture %}
+    <div class="current-photo">
+      <img src="{{ request.user.profile_picture.url }}" alt="Profile Picture">
+    </div>
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+
+      <label for="id_first_name">First Name</label>
+      {{ form.first_name.errors }}
+      {{ form.first_name }}
+
+      <label for="id_last_name">Last Name</label>
+      {{ form.last_name.errors }}
+      {{ form.last_name }}
+
+      <label for="id_email">Email</label>
+      {{ form.email.errors }}
+      {{ form.email }}
+
+      <label for="id_phone">Phone</label>
+      {{ form.phone.errors }}
+      {{ form.phone }}
+
+      <label for="id_profile_picture">Profile Picture</label>
+      {{ form.profile_picture.errors }}
+      {{ form.profile_picture }}
+
+      <button type="submit">Save Changes</button>
+    </form>
+  </div>
+</body>
+</html>

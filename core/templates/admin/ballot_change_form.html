@@ -1,0 +1,26 @@
+{% extends "admin/change_form.html" %}
+{% block extrahead %}
+  {{ block.super }}
+  <style>
+    #style-preview {
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-top: 10px;
+    }
+  </style>
+{% endblock %}
+
+{% block after_related_objects %}
+  <h3>Ballot Style Preview</h3>
+  <div id="style-preview" style="{{ original.style_css|default:'' }}">
+    This is how your ballot style will look.
+  </div>
+
+  <script>
+    const styleInput = document.querySelector('#id_style_css');
+    const preview = document.getElementById('style-preview');
+    styleInput.addEventListener('input', () => {
+      preview.style = styleInput.value;
+    });
+  </script>
+{% endblock %}

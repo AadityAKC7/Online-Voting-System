@@ -1,0 +1,129 @@
+{% extends "admin_base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}Manage Candidates{% endblock %}
+{% block header_title %}Manage Candidates{% endblock %}
+
+{% block admin_content %}
+  <!-- Add Candidate Button -->
+  <button id="openModalBtn"
+          class="mb-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+    Add Candidate
+  </button>
+
+  <!-- Modal Form -->
+  <div id="addCandidateModal"
+       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+      <h3 class="text-xl font-semibold mb-4">Add New Candidate</h3>
+      <form method="post" action="{% url 'manage_candidates' %}" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+
+        <!-- Name -->
+        <div class="mb-4">
+          <label for="{{ form.name.id_for_label }}" class="block font-medium mb-1">Name</label>
+          {{ form.name|add_class:"w-full border rounded px-3 py-2" }}
+          {% for error in form.name.errors %}
+            <p class="text-red-600 text-sm mt-1">{{ error }}</p>
+          {% endfor %}
+        </div>
+
+        <!-- Position -->
+        <div class="mb-4">
+          <label for="{{ form.position.id_for_label }}" class="block font-medium mb-1">Position</label>
+          {{ form.position|add_class:"w-full border rounded px-3 py-2" }}
+          {% for error in form.position.errors %}
+            <p class="text-red-600 text-sm mt-1">{{ error }}</p>
+          {% endfor %}
+        </div>
+
+        <!-- Image -->
+        <div class="mb-6">
+          <label for="{{ form.image.id_for_label }}" class="block font-medium mb-1">Image</label>
+          {{ form.image|add_class:"w-full" }}
+          {% for error in form.image.errors %}
+            <p class="text-red-600 text-sm mt-1">{{ error }}</p>
+          {% endfor %}
+        </div>
+
+        <!-- Actions -->
+        <div class="flex justify-end space-x-3">
+          <button type="button" id="closeModalBtn"
+                  class="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500">
+            Cancel
+          </button>
+          <button type="submit"
+                  class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+            Add
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Candidates Table -->
+  <h3 class="text-2xl font-semibold mb-4">Existing Candidates</h3>
+
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white border rounded-lg shadow">
+      <thead>
+        <tr class="bg-gray-100 text-left">
+          <th class="py-3 px-4 border-b">#</th>
+          <th class="py-3 px-4 border-b">Name</th>
+          <th class="py-3 px-4 border-b">Position</th>
+          <th class="py-3 px-4 border-b">Avatar</th>
+          <th class="py-3 px-4 border-b text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for candidate in candidates %}
+          <tr class="hover:bg-gray-50">
+            <td class="py-2 px-4 border-b">{{ forloop.counter }}</td>
+            <td class="py-2 px-4 border-b">{{ candidate.name }}</td>
+            <td class="py-2 px-4 border-b">{{ candidate.position.name }}</td>
+            <td class="py-2 px-4 border-b">
+              {% if candidate.image %}
+                <img src="{{ candidate.image.url }}" class="h-12 w-12 rounded-full object-cover" />
+              {% else %}
+                <span class="text-gray-400 italic">No Image</span>
+              {% endif %}
+            </td>
+            <td class="py-2 px-4 border-b text-center space-x-2">
+              <a href="{% url 'edit_candidate' candidate.id %}"
+                 class="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600">Edit</a>
+              <a href="{% url 'delete_candidate' candidate.id %}"
+                 onclick="return confirm('Are you sure you want to delete this candidate?')"
+                 class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">Delete</a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="5" class="text-center text-gray-500 py-4">No candidates found.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  const openBtn  = document.getElementById('openModalBtn');
+  const closeBtn = document.getElementById('closeModalBtn');
+  const modal    = document.getElementById('addCandidateModal');
+
+  openBtn.addEventListener('click', () => {
+    modal.classList.remove('hidden');
+  });
+
+  closeBtn.addEventListener('click', () => {
+    modal.classList.add('hidden');
+  });
+
+  window.addEventListener('click', e => {
+    if (e.target === modal) {
+      modal.classList.add('hidden');
+    }
+  });
+</script>
+{% endblock %}

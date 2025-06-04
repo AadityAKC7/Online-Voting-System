@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Admin{% endblock %}</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="flex min-h-screen bg-gray-100">
+  <!-- Sidebar -->
+  <nav class="w-64 bg-gray-900 text-gray-200 p-6 space-y-6 flex flex-col">
+  <h1 class="text-3xl font-bold tracking-wide mb-8">Admin Panel</h1>
+  <a href="{% url 'admin_dashboard' %}" 
+     class="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7m-9 2v6m-4 0h12"/></svg>
+    <span>Dashboard</span>
+  </a>
+  <a href="{% url 'manage_voters' %}" 
+     class="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87M12 4v16"/></svg>
+    <span>Manage Voters</span>
+  </a>
+  <a href="{% url 'manage_candidates' %}" 
+     class="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition ">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.375 6.511L12 21l-6.535-3.911a12.083 12.083 0 01.375-6.511L12 14z"/></svg>
+    <span>Manage Candidates</span>
+  </a>
+  <a href="{% url 'manage_positions' %}" 
+     class="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4h14V3M5 21v-6h14v6"/></svg>
+    <span>Manage Positions</span>
+  </a>
+  <a href="{% url 'votes' %}" 
+     class="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    <span>Votes</span>
+  </a>
+  <form method="POST" action="{% url 'logout' %}">
+  {% csrf_token %}
+  <button type="submit" class="flex items-center space-x-3 px-4 py-2 w-full rounded-lg hover:bg-gray-800 transition text-gray-200">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-10v1" />
+    </svg>
+    <span>Logout</span>
+  </button>
+</form>
+</nav>
+
+
+  <!-- Main content -->
+  <main class="flex-1 p-8">
+    <header class="mb-8">
+      <h2 class="text-3xl font-semibold">{% block header_title %}Admin{% endblock %}</h2>
+    </header>
+
+    <div>
+      {% block admin_content %}{% endblock %}
+    </div>
+  </main>
+
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

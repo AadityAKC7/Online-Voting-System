@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            margin-top: 40px;
+            color: #333;
+        }
+        .container {
+            width: 400px;
+            margin: 20px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        label.required:after {
+            content: " *";
+            color: red;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .buttons button {
+            padding: 10px 20px;
+            border: none;
+            color: white;
+            background-color: #007bff;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            width: 45%;
+        }
+        .buttons button.register {
+            background-color: #28a745;
+        }
+        .buttons button:hover {
+            opacity: 0.9;
+        }
+        .errorlist {
+            color: red;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Voting System</h1>
+    <div class="container">
+        <h2>Registration</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+                <label class="{% if field.field.required %}required{% endif %}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="errorlist">{{ field.errors.as_text|escape }}</div>
+                {% endif %}
+            {% endfor %}
+                <div class="buttons">
+                <button class="register" type="submit">Register</button>
+                <button onclick="window.location.href='{% url 'login' %}'" type="button">Login</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
