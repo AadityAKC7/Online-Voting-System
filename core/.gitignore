@@ -1,5 +1,8 @@
-core/keys/private_key.pem
-core/keys/public_key.pem
-name.pem
-generate_rsa_keys.py
+# Ignore all PEM keys
+*.pem
+
+# Or ignore specific files/folders
 core/keys/
+generate_rsa_keys.py
+private_key.pem
+public_key.pem
