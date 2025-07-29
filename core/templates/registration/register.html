@@ -1,93 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Register</title>
-    <style>
-        body {
-            font-family: Arial;
-            background: #f2f2f2;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        h1 {
-            margin-top: 40px;
-            color: #333;
-        }
-        .container {
-            width: 400px;
-            margin: 20px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px gray;
-        }
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #333;
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-        }
-        label.required:after {
-            content: " *";
-            color: red;
-        }
-        input {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            box-sizing: border-box;
-        }
-        .buttons {
-            margin-top: 20px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .buttons button {
-            padding: 10px 20px;
-            border: none;
-            color: white;
-            background-color: #007bff;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-            width: 45%;
-        }
-        .buttons button.register {
-            background-color: #28a745;
-        }
-        .buttons button:hover {
-            opacity: 0.9;
-        }
-        .errorlist {
-            color: red;
-            margin-top: 5px;
-            font-size: 14px;
-        }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Voting System</h1>
-    <div class="container">
-        <h2>Registration</h2>
-        <form method="POST">
+<body class="bg-gray-100 font-sans min-h-screen flex flex-col items-center">
+    <h1 class="text-4xl font-bold text-gray-800 mt-10">Voting System</h1>
+
+    <div class="container bg-white w-[400px] mt-6 p-8 rounded-xl shadow-lg">
+        <h2 class="text-2xl font-semibold text-center text-gray-700 mb-6">Registration</h2>
+        <form method="POST" class="space-y-4">
             {% csrf_token %}
             {% for field in form %}
-                <label class="{% if field.field.required %}required{% endif %}">{{ field.label }}</label>
-                {{ field }}
-                {% if field.errors %}
-                    <div class="errorlist">{{ field.errors.as_text|escape }}</div>
-                {% endif %}
+                <div>
+                    <label class="block text-gray-700 font-medium {% if field.field.required %}after:content-['*'] after:ml-1 after:text-red-500{% endif %}">
+                        {{ field.label }}
+                    </label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <p class="text-red-600 text-sm mt-1">{{ field.errors.0 }}</p>
+                    {% endif %}
+                </div>
             {% endfor %}
-                <div class="buttons">
-                <button class="register" type="submit">Register</button>
-                <button onclick="window.location.href='{% url 'login' %}'" type="button">Login</button>
+
+            <div class="flex justify-between space-x-4 pt-2">
+                <button type="submit"
+                    class="register w-1/2 bg-green-600 text-white py-2 rounded-md font-semibold hover:bg-green-700 transition">
+                    Register
+                </button>
+                <button type="button" onclick="window.location.href='{% url 'login' %}'"
+                    class="w-1/2 bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700 transition">
+                    Login
+                </button>
             </div>
         </form>
     </div>

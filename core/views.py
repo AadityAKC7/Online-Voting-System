@@ -263,7 +263,7 @@ def reset_votes(request):
     if request.method == 'POST':
         Vote.objects.all().delete()
         messages.success(request, "All votes have been reset.")
-    return redirect('all_votes')
+    return redirect('votes')
 
 @staff_member_required
 def manage_voters(request):

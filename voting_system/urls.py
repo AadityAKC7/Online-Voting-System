@@ -31,7 +31,7 @@ urlpatterns = [
     path('get-public-key/', core_views.get_public_key, name='get_public_key'),
 
     path('search/', core_views.search, name='search'),
-    path('vote/', core_views.vote_page, name='vote'),
+    path('vote/', core_views.decryptw, name='vote'),
     path('api/public-key/', get_public_key, name='get_public_key'),
 
     path('admin-dashboard/', core_views.admin_dashboard, name='admin_dashboard'),
