@@ -1,3 +1,5 @@
 core/keys/private_key.pem
 core/keys/public_key.pem
-VOTING_SYSTEM/core/keys
+name.pem
+generate_rsa_keys.py
+core/keys/
